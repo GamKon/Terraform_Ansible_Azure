@@ -71,6 +71,32 @@ resource "azurerm_network_interface" "example_app_nic" {
   }
 }
 
+resource "azurerm_network_security_group" "inbound_rules" {
+  name                = "inbound-rules"
+  location            = azurerm_resource_group.example_app_rg.location
+  resource_group_name = azurerm_resource_group.example_app_rg.name
+
+  security_rule {
+    name                       = "in_port_7777"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "7777"
+    destination_port_range     = "7777"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+  tags = {
+    environment = "Dev"
+  }
+}
+
+resource "azurerm_network_interface_security_group_association" "nic_to_sg" {
+  network_interface_id      = azurerm_network_interface.example_app_nic.id
+  network_security_group_id = azurerm_network_security_group.inbound_rules.id
+}
+
 resource "azurerm_linux_virtual_machine" "vm_1" {
   name                = "vm-1"
   resource_group_name = azurerm_resource_group.example_app_rg.name
