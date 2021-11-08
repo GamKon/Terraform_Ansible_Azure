@@ -1,0 +1,7 @@
+---
+- name: Run-web-app
+  hosts: azvm1
+  tasks:
+    - name: Run-app-script
+      ansible.builtin.script: hello-app.sh
+

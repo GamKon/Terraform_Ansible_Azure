@@ -2,7 +2,6 @@
 *.private
 .terraform*
 
-
 # Local .terraform directories
 **/.terraform/*
 
